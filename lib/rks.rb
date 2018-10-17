@@ -1,3 +1,9 @@
+require 'rubygems'
+require 'bundler/setup'
+require 'benchmark'
+
+Bundler.require(:default, :development)
+
 require "rks/version"
 require 'rks/kafka'
 require 'rks/log_stash'
