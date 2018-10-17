@@ -13,6 +13,7 @@ module Sidekiq
         Application.logger.info correlation_id: correlation_id, status: "finished", worker: self.class.name, jid: self.jid, duration: duration.real.round(3)
       rescue Exception => e
         Application.logger.fatal correlation_id: correlation_id, status: "failed", worker: self.class.name, jid: self.jid, content: content, error_message: e.message, error_detail: e.backtrace
+        raise e
       end
     end
   end
