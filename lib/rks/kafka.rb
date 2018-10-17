@@ -1,3 +1,5 @@
+require 'kafka'
+
 Kafka.module_eval do
   def self.config
     @config ||= OpenStruct.new

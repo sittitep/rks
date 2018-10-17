@@ -1,3 +1,5 @@
+require 'logstash-logger'
+
 LogStashLogger.configure do |config|
   config.customize_event do |event|
     event["app"] = Application.config.name
