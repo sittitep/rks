@@ -34,10 +34,11 @@ class Application
   end
 
   def self.run
-    Application.logger.info action: "application.started"
+    Application.logger.info message: "Application started"
 
     Application.events.keys.each do |event_name|
-      Kafka.consumer.subscribe(event_name.to_s, start_from_beginning: false)
+      topic = [config.env,event_name].join("-")
+      Kafka.consumer.subscribe(topic, start_from_beginning: false)
     end
     # This will loop indefinitely, yielding each message in turn.
     Kafka.consumer.each_message do |message|
