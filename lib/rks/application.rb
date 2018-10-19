@@ -44,10 +44,9 @@ class Application
     Kafka.consumer.each_message do |message|
       duration = Benchmark.measure {
         initalize_application_current_state(message)
-        event_name = message.topic.gsub("#{config.env}-", "")
 
         Application.logger.info correlation_id: current_correlation_id, status: "started", event: current_event, payload: current_payload
-        Application.events[event_name].call
+        Application.events[current_event].call
       }
       Application.logger.info correlation_id: current_correlation_id, status: "finished", event: current_event, duration: duration.real.round(3)
     rescue Exception => e
@@ -55,9 +54,13 @@ class Application
     end
   end
 
+  def self.convert_event_name(topic)
+    topic.gsub("#{config.env}-", "")
+  end
+
   def self.initalize_application_current_state(message)
     Application.current.correlation_id = message.key
-    Application.current.event = message.topic
+    Application.current.event = convert_event_name(message.topic)
     Application.current.payload = JSON.parse(message.value)
   end
 end
