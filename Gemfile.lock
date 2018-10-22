@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rks (0.2.9)
+    rks (0.2.10)
       logstash-logger (~> 0.26.1)
       poseidon (~> 0.0.5)
       ruby-kafka (~> 0.7.2)
@@ -54,7 +54,6 @@ DEPENDENCIES
   rake (~> 10.0)
   rks!
   rspec (~> 3.0)
-  sidekiq-pro (= 3.5.4)!
 
 BUNDLED WITH
    1.16.2
