@@ -9,8 +9,12 @@ Kafka.module_eval do
     yield config
   end
 
-  def self.client
-    @client ||= new(config.brokers)
+  def self.client(args)
+    if args[:new]
+      new(config.brokers)
+    else
+      @client ||= new(config.brokers)
+    end
   end
 
   def self.producer
