@@ -9,7 +9,7 @@ Kafka.module_eval do
     yield config
   end
 
-  def self.client(args)
+  def self.client(args = {})
     if args[:new]
       new(config.brokers)
     else
