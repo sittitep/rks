@@ -5,10 +5,11 @@ class Application
     @config ||= OpenStruct.new(
       name: "regular-rks-app", env: "development", 
       logger:  LogStashLogger.new(
+        buffer_max_items: 5000,
+        buffer_max_interval: 1,
         type: :multi_logger,
-        outputs: [
-          {type: :stdout}
-        ]
+        type: :multi_logger,
+        outputs: default_logger_outputs
       )
     )
   end
@@ -31,6 +32,13 @@ class Application
 
   def self.logger
     @logger ||= config.logger
+  end
+
+  def self.default_logger_outputs
+    outputs = []
+    outputs << {type: :stdout}
+    outputs << {type: :file, path: "log/#{ENV['RKS_ENV']}.log"} if ENV["LOG_FILE"]
+    outputs
   end
 
   def self.run
