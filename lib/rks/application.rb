@@ -41,6 +41,10 @@ class Application
     outputs
   end
 
+  def self.avro_registry
+    @avro ||= AvroTurf::Messaging.new(registry_url: Application.config.avro_registry_url)
+  end
+
   def self.run
     Application.logger.info message: "Application started"
 
@@ -51,7 +55,7 @@ class Application
     # This will loop indefinitely, yielding each message in turn.
     Kafka.consumer.each_message do |message|
       duration = Benchmark.measure {
-        initalize_application_current_state(message)
+        initalize_application_current_state(message.key, message.topic, message.value)
 
         Application.logger.info correlation_id: current_correlation_id, status: "started", event: current_event, payload: current_payload
         Application.events[current_event].call
@@ -66,9 +70,13 @@ class Application
     topic.gsub("#{config.env}-", "")
   end
 
-  def self.initalize_application_current_state(message)
-    Application.current.correlation_id = message.key
-    Application.current.event = convert_event_name(message.topic)
-    Application.current.payload = JSON.parse(message.value)
+  def self.initalize_application_current_state(key, topic, value)
+    Application.current.correlation_id = key
+    Application.current.event = convert_event_name(topic)
+    Application.current.payload = decode_message_value(topic, value)
+  end
+
+  def self.decode_message_value(topic, value)
+    avro_registry.decode(message.value, schema_name: topic)
   end
 end
