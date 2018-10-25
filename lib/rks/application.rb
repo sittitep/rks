@@ -78,14 +78,6 @@ class Application
   def self.initalize_application_current_state(key, topic, value)
     Application.current.correlation_id = key
     Application.current.event = convert_event_name(topic)
-    Application.current.payload = decode_message_value(topic, value)
-  end
-
-  def self.decode_message_value(topic, value)
-    avro_registry.decode(value, schema_name: camelize(convert_event_name(topic)))
-  end
-
-  def self.camelize(str)
-    str.split('-').collect(&:capitalize).join
+    Application.current.payload = value
   end
 end
