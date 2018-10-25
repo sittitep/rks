@@ -38,7 +38,7 @@ Kafka::Producer.class_eval do
     
     if args[:encoding]
       payload = Application.avro_registry.encode(payload, schema_name: schema_name(topic))
-    else
+    end
 
     original_produce(payload, **args[1])
   end
