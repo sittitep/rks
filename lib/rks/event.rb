@@ -3,9 +3,8 @@ module RKS
     extend ApplicationHelper
 
     def self.event(args, &block)
-      args[:decoding] ||= true
       Application.events[args[:name]] = Proc.new do
-        Application.current.payload = if args[:decoding] 
+        Application.current.payload = if args[:decoding] == true
           decode_message_value(current_event, current_payload)
         else
           JSON.parse(current_payload)
