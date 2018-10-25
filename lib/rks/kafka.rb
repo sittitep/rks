@@ -28,11 +28,18 @@ Kafka.module_eval do
 end
 
 Kafka::Producer.class_eval do
-  def produce(*args)
-    encoded_value = Application.avro_registry.encode(args[0], schema_name: args[1])
-    args[0] = encoded_value
-    args[1] = [Application.config.env, args[1]].join("-")
+  alias_method 'original_produce', 'produce'
 
-    super(args)
+  def produce(*args)
+    payload, topic = JSON.parse(JSON.dump(args[0])), args[1][:topic]
+
+    encoded_value = Application.avro_registry.encode(payload, schema_name: schema_name(topic))
+    args[1][:topic] = [Application.config.env, topic].join("-")
+
+    original_produce(encoded_value, **args[1])
+  end
+
+  def schema_name(topic)
+    Application.camelize(topic)
   end
 end

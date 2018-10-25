@@ -1,3 +1,5 @@
+require "avro_turf/messaging"
+
 class Application
   extend ApplicationHelper
 
@@ -42,7 +44,10 @@ class Application
   end
 
   def self.avro_registry
-    @avro ||= AvroTurf::Messaging.new(registry_url: Application.config.avro_registry_url)
+    @avro ||= AvroTurf::Messaging.new(
+      schemas_path: "./app/schemas",
+      registry_url: Application.config.avro_registry_url
+    )
   end
 
   def self.run
@@ -77,6 +82,10 @@ class Application
   end
 
   def self.decode_message_value(topic, value)
-    avro_registry.decode(message.value, schema_name: topic)
+    avro_registry.decode(value, schema_name: camelize(convert_event_name(topic)))
+  end
+
+  def self.camelize(str)
+    str.split('-').collect(&:capitalize).join
   end
 end
