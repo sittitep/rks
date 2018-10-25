@@ -62,7 +62,6 @@ class Application
       duration = Benchmark.measure {
         initalize_application_current_state(message.key, message.topic, message.value)
 
-        Application.logger.info correlation_id: current_correlation_id, status: "started", event: current_event, payload: current_payload
         Application.events[current_event].call
       }
       Application.logger.info correlation_id: current_correlation_id, status: "finished", event: current_event, duration: duration.real.round(3)

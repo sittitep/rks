@@ -31,19 +31,20 @@ Kafka::Producer.class_eval do
   alias_method 'original_produce', 'produce'
 
   def produce(*args)
-    args[:encoding] || true
-    payload, topic = JSON.parse(JSON.dump(args[0])), args[1][:topic]
+    args[1][:encoding] ||= true
+    payload, topic, encoding = JSON.parse(JSON.dump(args[0])), args[1][:topic], args[1][:encoding]
 
     args[1][:topic] = [Application.config.env, topic].join("-")
-    
-    if args[:encoding]
-      payload = Application.avro_registry.encode(payload, schema_name: schema_name(topic))
+    args[1].delete(:encoding)
+
+    if encoding
+      payload = Application.avro_registry.encode(payload, schema_name: camelize(topic))
     end
 
     original_produce(payload, **args[1])
   end
 
-  def schema_name(topic)
-    Application.camelize(topic)
+  def camelize(str)
+    str.split('-').collect(&:capitalize).join
   end
 end

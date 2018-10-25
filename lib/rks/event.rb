@@ -5,11 +5,14 @@ module RKS
     def self.event(args, &block)
       args[:decoding] ||= true
       Application.events[args[:name]] = Proc.new do
-        if args[:decoding] 
-          decode_message_value(current_topic, current_payload)
+        Application.current.payload = if args[:decoding] 
+          decode_message_value(current_event, current_payload)
         else
-          yield(JSON.parse(current_payload))
+          JSON.parse(current_payload)
         end
+
+        Application.logger.info correlation_id: current_correlation_id, status: "started", event: current_event, payload: current_payload
+        yield(current_payload)
       end
     end
 
