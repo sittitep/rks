@@ -31,7 +31,8 @@ Kafka::Producer.class_eval do
   alias_method 'original_produce', 'produce'
 
   def produce(*args)
-    payload, topic, encoding = JSON.parse(JSON.dump(args[0])), args[1][:topic], args[1][:encoding] == true
+    encoding = args[1][:encoding] == true || args[:encoding] == nil
+    payload, topic, encoding = JSON.parse(JSON.dump(args[0])), args[1][:topic]
     args[1][:topic] = [Application.config.env, topic].join("-")
     args[1].delete(:encoding)
 
