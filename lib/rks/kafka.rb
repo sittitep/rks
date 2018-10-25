@@ -36,8 +36,10 @@ Kafka::Producer.class_eval do
     args[1][:topic] = [Application.config.env, topic].join("-")
     args[1].delete(:encoding)
 
-    if encoding
-      payload = Application.avro_registry.encode(payload, schema_name: camelize(topic))
+    payload = if encoding
+      Application.avro_registry.encode(payload, schema_name: camelize(topic))
+    else
+      JSON.dump(payload)
     end
 
     original_produce(payload, **args[1])
