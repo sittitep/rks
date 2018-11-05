@@ -16,7 +16,7 @@ module RKS
     end
 
     def self.decode_message_value(topic, value)
-      Application.avro_registry.decode(value, schema_name: camelize(topic))
+      Application.avro_registry.decode(value, schema_name: camelize(topic), namespace: "events.#{topic.gsub('-','_')}")
     end
 
     def self.camelize(str)
