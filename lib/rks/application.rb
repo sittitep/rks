@@ -66,7 +66,11 @@ class Application
       }
       Application.logger.info correlation_id: current_correlation_id, status: "finished", event: current_event, duration: duration.real.round(3)
     rescue Exception => e
-      Application.logger.fatal correlation_id: current_correlation_id, status: "failed", event: current_event, payload: current_payload, error_message: e.message, error_detail: e.backtrace
+      begin
+        Application.logger.fatal correlation_id: current_correlation_id, status: "failed", event: current_event, payload: current_payload, error_message: e.message, error_detail: e.backtrace
+      rescue Encoding::UndefinedConversionError
+        Application.logger.fatal correlation_id: current_correlation_id, status: "failed", event: current_event, error_message: e.message, error_detail: e.backtrace
+      end
     end
   end
 
