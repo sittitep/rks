@@ -55,7 +55,7 @@ class Application
 
     Application.events.keys.each do |event_name|
       topic = [config.env,event_name].join("-")
-      Kafka.consumer.subscribe(topic, start_from_beginning: false)
+      Kafka.consumer.subscribe(topic)
     end
     # This will loop indefinitely, yielding each message in turn.
     Kafka.consumer.each_message do |message|
