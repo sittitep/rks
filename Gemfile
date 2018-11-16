@@ -7,6 +7,7 @@ end
 
 gem 'byebug'
 gem 'minitest'
+gem 'concurrent-ruby', require: 'concurrent'
 
 # Specify your gem's dependencies in rks.gemspec
 gemspec
