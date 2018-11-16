@@ -1,10 +1,11 @@
 module RKS
   module Support
     module Configurable
+      extend RKS::Support::Concern
+
       class InvalidConfugurationName < StandardError; end;
 
       module ClassMethods
-
         def config
           @config ||= OpenStruct.new
         end
@@ -20,11 +21,6 @@ module RKS
         def configure
           yield config
         end
-      end
-      
-      def self.included(receiver) 
-        receiver.extend ClassMethods if const_defined?(:ClassMethods)
-        receiver.send :include, InstanceMethods if const_defined?(:InstanceMethods)
       end
     end
   end

@@ -4,6 +4,7 @@ require 'benchmark'
 
 Bundler.require(:default, :development)
 
+require 'rks/support/concern'
 require 'rks/support/configurable'
 
 require "rks/version"
