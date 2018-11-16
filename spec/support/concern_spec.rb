@@ -20,7 +20,7 @@ class Foo
   include Bar
 end
 
-class TestConfigurable < Minitest::Test
+class TestConcern < Minitest::Test
   def setup
     @foo = Foo
   end
