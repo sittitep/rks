@@ -2,27 +2,9 @@ require "avro_turf/messaging"
 
 class Application
   extend ApplicationHelper
+  include RKS::Support::Configurable
 
-  def self.config
-    @config ||= OpenStruct.new(
-      name: "regular-rks-app", env: "development", 
-      logger:  LogStashLogger.new(
-        buffer_max_items: 5000,
-        buffer_max_interval: 1,
-        type: :multi_logger,
-        type: :multi_logger,
-        outputs: default_logger_outputs
-      )
-    )
-  end
-
-  def self.current
-    @current ||= OpenStruct.new
-  end
-
-  def self.configure(&block)
-    yield config
-  end
+  config_attr name: "regular-rks-app", env: "dev"
 
   def self.commands
     @commands ||= {}
@@ -33,7 +15,13 @@ class Application
   end
 
   def self.logger
-    @logger ||= config.logger
+    @logger ||= LogStashLogger.new(
+      buffer_max_items: 5000,
+      buffer_max_interval: 1,
+      type: :multi_logger,
+      type: :multi_logger,
+      outputs: default_logger_outputs
+    )
   end
 
   def self.default_logger_outputs

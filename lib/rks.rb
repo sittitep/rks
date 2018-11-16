@@ -4,6 +4,8 @@ require 'benchmark'
 
 Bundler.require(:default, :development)
 
+require 'rks/support/configurable'
+
 require "rks/version"
 require 'rks/kafka'
 require 'rks/log_stash'
@@ -15,5 +17,3 @@ require 'rks/application'
 require 'rks/command'
 require 'rks/event'
 require 'rks/worker'
-
-require 'rks/support/configurable'
