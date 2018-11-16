@@ -7,6 +7,8 @@ Bundler.require(:default, :development)
 require 'rks/support/concern'
 require 'rks/support/configurable'
 
+require 'rks/event/processor'
+
 require "rks/version"
 require 'rks/kafka'
 require 'rks/log_stash'
