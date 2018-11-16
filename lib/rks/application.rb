@@ -6,6 +6,10 @@ class Application
 
   config_attr name: "regular-rks-app", env: "dev"
 
+  def self.current
+    @current ||= OpenStruct.new
+  end
+  
   def self.commands
     @commands ||= {}
   end
