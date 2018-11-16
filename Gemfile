@@ -5,5 +5,8 @@ source 'https://46617433:56bec501@gems.contribsys.com/' do
   gem 'sidekiq-pro', '4.0.4'
 end
 
+gem 'byebug'
+gem 'minitest'
+
 # Specify your gem's dependencies in rks.gemspec
 gemspec
