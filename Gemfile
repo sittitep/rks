@@ -8,6 +8,11 @@ end
 gem 'byebug'
 gem 'minitest'
 gem 'concurrent-ruby', require: 'concurrent'
+gem 'ruby-kafka'
+gem 'avro_turf'
+gem 'sidekiq'
+gem 'logstash-logger'
+gem 'poseidon'
 
 # Specify your gem's dependencies in rks.gemspec
 gemspec
