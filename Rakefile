@@ -3,7 +3,7 @@ require "rspec/core/rake_task"
 require "rake/testtask"
 
 Rake::TestTask.new do |t|
-  t.test_files = FileList['spec/**/*_spec.rb']
+  t.test_files = FileList['test/**/*_test.rb']
 end
 desc "Run tests"
 
