@@ -11,9 +11,10 @@ require 'rks/support/configurable'
 require 'rks/event/handler'
 require 'rks/event/processor'
 
+
+require 'rks/logger'
 require "rks/version"
 require 'rks/kafka'
-require 'rks/log_stash'
 require 'rks/sidekiq'
 
 require 'rks/helper/application_helper'

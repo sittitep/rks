@@ -19,20 +19,7 @@ class Application
   end
 
   def self.logger
-    @logger ||= LogStashLogger.new(
-      buffer_max_items: 5000,
-      buffer_max_interval: 1,
-      type: :multi_logger,
-      type: :multi_logger,
-      outputs: default_logger_outputs
-    )
-  end
-
-  def self.default_logger_outputs
-    outputs = []
-    outputs << {type: :stdout}
-    outputs << {type: :file, path: "log/#{ENV['RKS_ENV']}.log"} if ENV["LOG_FILE"]
-    outputs
+    @logger ||= RKS::Logger.init
   end
 
   def self.avro_registry
