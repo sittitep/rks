@@ -1,45 +1,60 @@
 module RKS
   module Support
     module Routable
+      class NoMethodFound < StandardError; end;
+
       extend RKS::Support::Concern
 
       module ClassMethods
         def route(name)
-          route = Router.find(name)
-          route.call
+          block = router.find(name)
+          block.call
+        rescue Exception => e
+          handle_exception(e)
         end
 
         def router
-          @router ||= Router
+          @router ||= Router.new(owner: self.to_s)
+        end
+
+        def handle_exception(e)
+          case e.class.to_s
+          when NoMethodError.to_s
+            raise NoMethodFound, "You need to define #{e.name} first"
+          else
+            raise e
+          end
         end
       end
 
-      module Router
+      class Router
         class RouteNotFound < StandardError; end;
 
-        class << self
-          def find(name)
-            if route = routes[name]
-              route
-            else
-              raise RouteNotFound, "#{name} is not found"
-            end
-          end
+        attr_accessor :owner, :routes
 
-          def routes
-            @routes ||= {}
-          end
+        def initialize(owner:)
+          @owner = owner
+          @routes = {}
+        end
 
-          def draw
-            yield(Router)
+        def find(name)
+          if route = routes[name]
+            route
+          else
+            raise RouteNotFound, "#{name} is not found in #{owner} routes"
           end
+        end
 
-          def on(name, to:)
-            klass_name, action = to.split('#')
-            klass = Object.const_get(klass_name)
-            
-            routes.merge!({name => Proc.new { klass.new.send(action.to_sym) }})
-          end
+        def draw
+          yield(self)
+        end
+
+        def on(name, to:)
+          klass_name, action = to.split('#')
+          klass = Object.const_get(klass_name)
+          
+          block = Proc.new { klass.new.send(action.to_sym) }
+          routes.merge!({name => block})
         end
       end
     end
