@@ -16,8 +16,6 @@ class TestProcessor < Minitest::Test
   end
 
   def test_process
-    assert_raises RKS::Support::Routable::Router::RouteNotFound do
-      @processor.process
-    end
+    assert_equal nil, @processor.process
   end
 end

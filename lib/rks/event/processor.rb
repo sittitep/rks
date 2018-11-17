@@ -21,7 +21,7 @@ module RKS
         end
 
         def current
-          @current.value
+          @current.value || Processor.new
         end
 
         def process(args)
