@@ -8,6 +8,7 @@ require 'rks/support/concern'
 require 'rks/support/routable'
 require 'rks/support/configurable'
 
+require 'rks/event/handler'
 require 'rks/event/processor'
 
 require "rks/version"
