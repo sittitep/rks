@@ -5,7 +5,8 @@ module RKS
 
       module ClassMethods
         def route(name)
-          Router.routes[name].call
+          route = Router.find(name)
+          route.call
         end
 
         def router
@@ -14,7 +15,17 @@ module RKS
       end
 
       class Router
+        class RouteNotFound < StandardError; end;
+
         class << self
+          def find(name)
+            if route = routes[name]
+              route
+            else
+              raise RouteNotFound, "#{name} is not found"
+            end
+          end
+
           def routes
             @routes ||= {}
           end
