@@ -12,8 +12,7 @@ module RKS
       end
 
       def process
-        event_handler = RKS::Event::Handler.find(@event)
-        event_handler.process
+        RKS::Event::Handler.call(@event)
       end
 
       class << self

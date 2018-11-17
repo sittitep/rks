@@ -14,4 +14,10 @@ class TestProcessor < Minitest::Test
     assert_equal "bar", RKS::Event::Processor.current.event
     assert_equal "baz", RKS::Event::Processor.current.payload
   end
+
+  def test_process
+    assert_raises RKS::Support::Routable::Router::RouteNotFound do
+      @processor.process
+    end
+  end
 end
