@@ -7,7 +7,7 @@ class Foo
 end
 
 RKS::Event::Handler.router.draw do |r|
-  r.on "foo-bar-baz", to: "Foo#bar"
+  r.on "foo-baz", to: "Foo#bar"
 end
 
 class TestHandler < Minitest::Test
@@ -16,6 +16,6 @@ class TestHandler < Minitest::Test
   end
 
   def test_call
-    assert_equal "baz", @handler.call("foo-bar-baz")
+    assert_equal "baz", @handler.call("foo-baz")
   end
 end
