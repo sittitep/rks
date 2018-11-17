@@ -1,6 +1,6 @@
 module RKS
   module Event
-    class Handler
+    module Handler
       include RKS::Support::Routable
 
       class << self
