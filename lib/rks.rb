@@ -5,6 +5,7 @@ require 'benchmark'
 Bundler.require(:default, :development)
 
 require 'rks/support/concern'
+require 'rks/support/routable'
 require 'rks/support/configurable'
 
 require 'rks/event/processor'
