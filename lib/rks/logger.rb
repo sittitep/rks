@@ -46,4 +46,12 @@ LogStashLogger::MultiLogger.class_eval do
     Application.logger.fatal correlation_id: RKS::Event::Processor.current.key, status: "failed", event: RKS::Event::Processor.current.event, error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace
     nil
   end
+
+  def with_rescue_and_duration
+    with_rescue do
+      with_duration do
+        yield
+      end
+    end
+  end
 end

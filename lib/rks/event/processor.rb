@@ -1,8 +1,10 @@
 module RKS
   module Event
     class Processor
-      attr_accessor :key, :event, :payload
+      class ProcessorNotInitialized < StandardError; end;
       
+      attr_accessor :key, :event, :payload
+
       def initialize(key:, event:, payload:)
         @key = key
         @event = event
@@ -12,7 +14,9 @@ module RKS
       end
 
       def process
-        RKS::Event::Handler.call(@event)
+        Application.logger.with_rescue_and_duration do
+          RKS::Event::Handler.call(@event)
+        end
       end
 
       class << self
@@ -21,7 +25,11 @@ module RKS
         end
 
         def current
-          @current.value || Processor.new
+          if @current
+            @current.value
+          else
+            raise ProcessorNotInitialized, "#set_current_processor is needed"
+          end
         end
 
         def process(args)
@@ -31,3 +39,4 @@ module RKS
     end
   end
 end
+

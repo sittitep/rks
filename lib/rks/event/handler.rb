@@ -5,11 +5,7 @@ module RKS
 
       class << self
         def call(name)
-          Application.logger.with_rescue do
-            Application.logger.with_duration do
-              route(name)
-            end
-          end
+          route(name)
         end
       end
     end
