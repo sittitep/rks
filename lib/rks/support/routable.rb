@@ -14,7 +14,7 @@ module RKS
         end
       end
 
-      class Router
+      module Router
         class RouteNotFound < StandardError; end;
 
         class << self
