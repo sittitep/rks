@@ -1,5 +1,7 @@
 require_relative "../test_helper"
 
+
+
 class TestProcessor < Minitest::Test
   def setup
     @processor = RKS::Event::Processor.new(key: "foo", event: "bar", payload: "baz")
@@ -16,6 +18,11 @@ class TestProcessor < Minitest::Test
   end
 
   def test_process
-    assert_equal nil, @processor.process
+    handler = MiniTest::Mock.new
+    handler.expect(:call, nil, ["bar"])
+
+    RKS::Event::Handler.stub :call, handler do
+      assert_nil @processor.process
+    end
   end
 end
