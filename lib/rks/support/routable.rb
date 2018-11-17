@@ -18,8 +18,7 @@ module RKS
         end
 
         def handle_exception(e)
-          case e.class.to_s
-          when NoMethodError.to_s
+          if e.class.to_s ==  NoMethodError.to_s
             raise NoMethodFound, "You need to define #{e.name} first"
           else
             raise e
