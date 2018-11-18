@@ -6,7 +6,7 @@ module RKS
       class << self
         def call(key:, event:, payload:)
           route = router.find(event)
-          route[:block].call
+          route[:block].call(payload)
         end
       end
     end

@@ -36,9 +36,27 @@ module RKS
         def on(name, to:, options: nil)
           klass_name, action = to.split('#')
           klass = Object.const_get(klass_name)
-          
-          block = Proc.new { klass.new.send(action.to_sym) }
+
+          block = Proc.new { |payload| klass.new(payload: payload).send(action.to_sym) }
           routes.merge!({name => {block: block, options: options}})
+        end
+      end
+      
+      module Endpoint
+        extend RKS::Support::Concern
+
+        module ClassMethods
+          attr_accessor :payload
+        end
+
+        module InstanceMethods
+          def initialize(payload: nil)
+            @payload = payload
+          end
+
+          def payload
+            @payload
+          end
         end
       end
     end

@@ -12,6 +12,7 @@ require 'rks/command/base'
 require 'rks/command/handler'
 
 
+require 'rks/event/base'
 require 'rks/event/handler'
 require 'rks/event/processor'
 

@@ -1,7 +1,11 @@
 require_relative "../test_helper"
 
-class Foo
+class Foo 
   include RKS::Support::Routable
+end
+
+class FooFoo
+  include RKS::Support::Routable::Endpoint
 
   def foo
     "foo"
@@ -9,8 +13,8 @@ class Foo
 end
 
 Foo.router.draw do |r|
-  r.on "foo-bar", to: "Foo#foo"
-  r.on "foo-bar-baz", to: "Foo#boo"
+  r.on "foo-bar", to: "FooFoo#foo"
+  r.on "foo-bar-baz", to: "FooFoo#boo"
 end
 
 class TestRoutable < Minitest::Test
