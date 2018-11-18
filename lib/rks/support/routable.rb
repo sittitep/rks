@@ -6,23 +6,8 @@ module RKS
       extend RKS::Support::Concern
 
       module ClassMethods
-        def route(name)
-          block = router.find(name)
-          block.call
-        rescue Exception => e
-          handle_exception(e)
-        end
-
         def router
           @router ||= Router.new(owner: self.to_s)
-        end
-
-        def handle_exception(e)
-          if e.class.to_s ==  NoMethodError.to_s
-            raise NoMethodFound, "You need to define #{e.name} first"
-          else
-            raise e
-          end
         end
       end
 
@@ -48,12 +33,12 @@ module RKS
           yield(self)
         end
 
-        def on(name, to:)
+        def on(name, to:, options: nil)
           klass_name, action = to.split('#')
           klass = Object.const_get(klass_name)
           
           block = Proc.new { klass.new.send(action.to_sym) }
-          routes.merge!({name => block})
+          routes.merge!({name => {block: block, options: options}})
         end
       end
     end

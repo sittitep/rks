@@ -32,14 +32,14 @@ RKS::Logger.configure do |config|
 end
 
 LogStashLogger::MultiLogger.class_eval do
-  def with_rescue_and_duration_event
-    info correlation_id: RKS::Event::Processor.current.key, status: "started", event: RKS::Event::Processor.current.event, payload: RKS::Event::Processor.current.payload
+  def with_rescue_and_duration_event(correalation_id, event, payload)
+    info correlation_id: correalation_id, status: "started", event: event, payload: payload
     duration = Benchmark.measure { @result = yield }
-    info correlation_id: RKS::Event::Processor.current.key, status: "finished", event: RKS::Event::Processor.current.event, duration: duration.real.round(3)
+    info correlation_id: correalation_id, status: "finished", event: event, duration: duration.real.round(3)
 
     @result
   rescue Exception => e
-    Application.logger.fatal correlation_id: RKS::Event::Processor.current.key, status: "failed", event: RKS::Event::Processor.current.event, error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace
+    Application.logger.fatal correlation_id: correalation_id, status: "failed", event: event, error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace
     nil
   end
 

@@ -19,14 +19,15 @@ class TestRoutable < Minitest::Test
   end
 
   def test_route
-    assert_equal "foo", Foo.route("foo-bar")
+    result = Foo.router.find("foo-bar")[:block].call
+    assert_equal "foo", result
     
-    assert_raises RKS::Support::Routable::NoMethodFound do
-      Foo.route("foo-bar-baz")
-    end
+    # assert_raises RKS::Support::Routable::NoMethodFound do
+    #   Foo.router.find("foo-bar-baz")
+    # end
 
     assert_raises RKS::Support::Routable::Router::RouteNotFound do
-      Foo.route("foo-bar-baz-boo-bor")
+      Foo.router.find("foo-bar-baz-boo-bor")
     end
   end
 end

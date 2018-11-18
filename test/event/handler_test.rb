@@ -16,6 +16,6 @@ class TestHandler < Minitest::Test
   end
 
   def test_call
-    assert_equal "baz", @handler.call("foo-baz")
+    assert_equal "baz", @handler.call(key: 1, event: "foo-baz", payload: {})
   end
 end

@@ -4,8 +4,9 @@ module RKS
       include RKS::Support::Routable
 
       class << self
-        def call(name)
-          route(name)
+        def call(key:, event:, payload:)
+          route = router.find(event)
+          route[:block].call
         end
       end
     end

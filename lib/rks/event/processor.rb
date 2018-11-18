@@ -14,8 +14,8 @@ module RKS
       end
 
       def process
-        Application.logger.with_rescue_and_duration_event do
-          RKS::Event::Handler.call(@event)
+        Application.logger.with_rescue_and_duration_event(@key, @event, @payload) do
+          RKS::Event::Handler.call(key: @key, event: @event, payload: @payload)
         end
       end
 
@@ -39,4 +39,3 @@ module RKS
     end
   end
 end
-

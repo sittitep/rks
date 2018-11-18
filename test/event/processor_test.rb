@@ -19,7 +19,7 @@ class TestProcessor < Minitest::Test
 
   def test_process
     handler = MiniTest::Mock.new
-    handler.expect(:call, nil, ["bar"])
+    handler.expect(:call, nil, [{key: "foo", event: "bar", payload: "baz"}])
 
     RKS::Event::Handler.stub :call, handler do
       assert_nil @processor.process
