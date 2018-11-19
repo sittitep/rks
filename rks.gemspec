@@ -34,4 +34,13 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.16"
   spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "avro_turf"
+  spec.add_development_dependency "byebug"
+  spec.add_development_dependency "concurrent-ruby"
+  spec.add_development_dependency "logstash-logger"
+  spec.add_development_dependency "minitest"
+  spec.add_development_dependency "poseidon"
+  spec.add_development_dependency "ruby-kafka"
+  spec.add_development_dependency "sidekiq"
+  spec.add_development_dependency "sidekiq-pro"
 end
