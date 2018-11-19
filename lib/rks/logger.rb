@@ -1,11 +1,3 @@
-#         Application.current.payload = if args[:decoding] == true || args[:decoding] == nil
-#           decode_message_value(current_event, current_payload)
-#         else
-#           JSON.parse(current_payload)
-#         end
-
-#         Application.logger.info correlation_id: current_correlation_id, status: "started", event: current_event, payload: current_payload
-#         yield(current_payload)
 RKS::Logger = LogStashLogger
 RKS::Logger.module_eval do
   class << self

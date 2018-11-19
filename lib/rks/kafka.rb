@@ -1,6 +1,3 @@
-require 'kafka'
-require 'avro_turf'
-
 Kafka.module_eval do
   def self.config
     @config ||= OpenStruct.new

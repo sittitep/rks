@@ -1,5 +1,3 @@
-require 'sidekiq'
-
 module Sidekiq
   module LogStash
     def perform(*args)
