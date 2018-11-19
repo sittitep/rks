@@ -20,18 +20,18 @@ class Application
     def run
       Application.logger.info message: "Application started"
   
-      RKS::Event::Processor.router.routes.keys.each do |event_name|
+      RKS::Event::Handler.router.routes.keys.each do |event_name|
         topic = [config.env,event_name].join("-")
         Kafka.consumer.subscribe(topic)
       end
       # This will loop indefinitely, yielding each message in turn.
       Kafka.consumer.each_message do |message|
-        RKS::Event::Processor.process(key: message.key, event: sanitized_event_name(message.topic), payload: message.value)
+        RKS::Event::Processor.process(correlation_id: message.key, event: sanitized_event_name(message.topic), payload: message.value)
       end
     end
   
-    def self.sanitized_event_name(topic)
-      topic.tr("#{config.env}-", "")
+    def sanitized_event_name(topic)
+      topic.gsub("#{config.env}-", "")
     end
   end
 end

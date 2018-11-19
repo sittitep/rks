@@ -1,12 +1,14 @@
+require 'concurrent'
+
 module RKS
   module Event
     class Processor
       class ProcessorNotInitialized < StandardError; end;
       
-      attr_accessor :key, :event, :payload
+      attr_accessor :correlation_id, :event, :payload
 
-      def initialize(key:, event:, payload:)
-        @key = key
+      def initialize(correlation_id:, event:, payload:)
+        @correlation_id = correlation_id
         @event = event
         @payload = payload
 
@@ -14,8 +16,8 @@ module RKS
       end
 
       def process
-        Application.logger.with_rescue_and_duration_event(@key, @event, @payload) do
-          RKS::Event::Handler.call(key: @key, event: @event, payload: @payload)
+        Application.logger.with_rescue_and_duration_event(@correlation_id, @event, @payload) do
+          RKS::Event::Handler.call(correlation_id: @correlation_id, event: @event, payload: @payload)
         end
       end
 

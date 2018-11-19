@@ -1,3 +1,5 @@
+require 'sidekiq'
+
 module Sidekiq
   class Processor
     # alias_method :original_execute_job, :execute_job

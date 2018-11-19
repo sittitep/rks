@@ -12,6 +12,6 @@ class TestCommandHandler < Minitest::Test
   end
 
   def test_foo
-    assert_equal "bar", @handler.call(correalation_id: 1, klass: FooCommand, action: :foo)
+    assert_equal "bar", @handler.call(correlation_id: 1, klass: FooCommand, action: :foo)
   end
 end

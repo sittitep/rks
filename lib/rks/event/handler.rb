@@ -4,7 +4,7 @@ module RKS
       include RKS::Support::Routable
 
       class << self
-        def call(key:, event:, payload:)
+        def call(correlation_id:, event:, payload:)
           route = router.find(event)
           decoded_payload = decode(payload: payload, options: route[:options])
           route[:block].call(decoded_payload)

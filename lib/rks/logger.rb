@@ -1,3 +1,5 @@
+require 'logstash-logger'
+
 RKS::Logger = LogStashLogger
 RKS::Logger.module_eval do
   class << self
