@@ -6,7 +6,16 @@ module RKS
       class << self
         def call(key:, event:, payload:)
           route = router.find(event)
-          route[:block].call(payload)
+          decoded_payload = decode(payload: payload, options: route[:options])
+          route[:block].call(decoded_payload)
+        end
+
+        def decode(payload:, options: {})
+          if options[:type] == "AVRO"
+            Application.avro_registry.decode(value, schema_name: options[:avro][:schema_name], namespace: options[:avro][:namespace])
+          else
+            JSON.parse(payload)
+          end
         end
       end
     end

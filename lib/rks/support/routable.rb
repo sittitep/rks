@@ -33,7 +33,7 @@ module RKS
           yield(self)
         end
 
-        def on(name, to:, options: nil)
+        def on(name, to:, options: {})
           klass_name, action = to.split('#')
           klass = Object.const_get(klass_name)
 

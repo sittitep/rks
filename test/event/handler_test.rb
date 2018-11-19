@@ -6,7 +6,7 @@ class Foo < RKS::Event::Base
   end
 
   def barbar
-    payload + 1
+    payload["foo"] + 1
   end
 end
 
@@ -21,10 +21,10 @@ class TestHandler < Minitest::Test
   end
 
   def test_call
-    assert_equal "baz", @handler.call(key: 1, event: "foo-baz", payload: {})
+    assert_equal "baz", @handler.call(key: 1, event: "foo-baz", payload: {foo: "bar"}.to_json)
   end
 
     def test_call_with_payload
-    assert_equal 2, @handler.call(key: 1, event: "foo-baz-baz", payload: 1)
+    assert_equal 2, @handler.call(key: 1, event: "foo-baz-baz", payload: {foo: 1}.to_json)
   end
 end
