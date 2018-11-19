@@ -4,10 +4,10 @@ module RKS
       include RKS::Command
       include RKS::Support::Configurable
       
-      attr_accessor :correalation_id, :args
+      attr_accessor :correlation_id, :args
 
       def initialize(_args)
-        @correalation_id = _args[:correalation_id]
+        @correlation_id = _args[:correlation_id]
         @args = _args[:args]
       end
     end

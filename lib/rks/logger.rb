@@ -26,36 +26,36 @@ RKS::Logger.configure do |config|
 end
 
 LogStashLogger::MultiLogger.class_eval do
-  def with_rescue_and_duration_event(correalation_id, event, payload)
-    info correlation_id: correalation_id, status: "started", event: event, payload: payload
+  def with_rescue_and_duration_event(correlation_id, event, payload)
+    info correlation_id: correlation_id, status: "started", event: event, payload: payload
     duration = Benchmark.measure { @result = yield }
-    info correlation_id: correalation_id, status: "finished", event: event, duration: duration.real.round(3)
+    info correlation_id: correlation_id, status: "finished", event: event, duration: duration.real.round(3)
 
     @result
   rescue Exception => e
-    Application.logger.fatal correlation_id: correalation_id, status: "failed", event: event, error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace
+    Application.logger.fatal correlation_id: correlation_id, status: "failed", event: event, error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace
     nil
   end
 
-  def with_rescue_and_duration_action(correalation_id, actor, args)
-    info correlation_id: correalation_id, status: "started", action: actor, args: args
+  def with_rescue_and_duration_action(correlation_id, actor, args)
+    info correlation_id: correlation_id, status: "started", action: actor, args: args
     duration = Benchmark.measure { @result = yield }
-    info correlation_id: correalation_id, status: "finished", action: actor, duration: duration.real.round(3)
+    info correlation_id: correlation_id, status: "finished", action: actor, duration: duration.real.round(3)
 
     @result
   rescue Exception => e
-    Application.logger.fatal correlation_id: correalation_id, status: "failed", action: actor, error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace
+    Application.logger.fatal correlation_id: correlation_id, status: "failed", action: actor, error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace
     nil
   end
 
-  def with_rescue_and_duration_worker(correalation_id, worker, args, jid)
-    info correlation_id: correalation_id, status: "started", worker: worker, jid: jid, args: args
+  def with_rescue_and_duration_worker(correlation_id, worker, args, jid)
+    info correlation_id: correlation_id, status: "started", worker: worker, jid: jid, args: args
     duration = Benchmark.measure { @result = yield }
-    info correlation_id: correalation_id, status: "finished", worker: worker, jid: jid, duration: duration.real.round(3)
+    info correlation_id: correlation_id, status: "finished", worker: worker, jid: jid, duration: duration.real.round(3)
 
     @result
   rescue Exception => e
-    Application.logger.fatal correlation_id: correalation_id, status: "failed", worker: worker, jid: jid, error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace
+    Application.logger.fatal correlation_id: correlation_id, status: "failed", worker: worker, jid: jid, error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace
     nil
   end
 end
