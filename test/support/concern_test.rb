@@ -16,13 +16,13 @@ module Bar
   end
 end
 
-class Foo
+class Foooo
   include Bar
 end
 
 class TestConcern < Minitest::Test
   def setup
-    @foo = Foo
+    @foo = Foooo
   end
 
   def test_config_attr

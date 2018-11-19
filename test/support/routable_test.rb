@@ -22,16 +22,7 @@ class TestRoutable < Minitest::Test
     @foo = Foo
   end
 
-  def test_route
-    result = Foo.router.find("foo-bar")[:block].call
-    assert_equal "foo", result
-    
-    # assert_raises RKS::Support::Routable::NoMethodFound do
-    #   Foo.router.find("foo-bar-baz")
-    # end
-
-    assert_raises RKS::Support::Routable::Router::RouteNotFound do
-      Foo.router.find("foo-bar-baz-boo-bor")
-    end
+  def test_find
+    assert_equal Hash, Foo.router.find("foo-bar").class
   end
 end

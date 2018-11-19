@@ -37,7 +37,7 @@ module RKS
           klass_name, action = to.split('#')
           klass = Object.const_get(klass_name)
 
-          block = Proc.new { |payload| klass.new(payload: payload).send(action.to_sym) }
+          block = Proc.new { |correlation_id, payload| klass.new(correlation_id: correlation_id, payload: payload).send(action.to_sym) }
           routes.merge!({name => {block: block, options: options}})
         end
       end

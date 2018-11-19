@@ -7,7 +7,7 @@ module RKS
         def call(correlation_id:, event:, payload:)
           route = router.find(event)
           decoded_payload = decode(payload: payload, options: route[:options])
-          route[:block].call(decoded_payload)
+          route[:block].call(correlation_id, decoded_payload)
         end
 
         def decode(payload:, options: {})
