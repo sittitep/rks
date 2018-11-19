@@ -1,16 +1,11 @@
 module Sidekiq
-  module LogStash
-    def perform(*args)
-      correlation_id = args[0]["correlation_id"]
-      begin
-        duration = Benchmark.measure {
-          Application.logger.info correlation_id: correlation_id, status: "started", worker: self.class.name, jid: self.jid, args: args[0]
-          super(*args)
-        }
-        Application.logger.info correlation_id: correlation_id, status: "finished", worker: self.class.name, jid: self.jid, duration: duration.real.round(3)
-      rescue Exception => e
-        Application.logger.fatal correlation_id: correlation_id, status: "failed", worker: self.class.name, jid: self.jid, args: args[0], error_message: e.message, error_detail: e.backtrace
-        raise e
+  class Processor
+    # alias_method :original_execute_job, :execute_job
+
+    def execute_job(worker, cloned_args)
+      correlation_id = cloned_args[0]["correlation_id"]
+      Application.logger.with_rescue_and_duration_worker(correlation_id, worker.class.name, cloned_args[0], worker.jid) do
+        worker.perform(*cloned_args)
       end
     end
   end

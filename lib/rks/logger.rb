@@ -45,4 +45,15 @@ LogStashLogger::MultiLogger.class_eval do
     Application.logger.fatal correlation_id: correalation_id, status: "failed", action: actor, error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace
     nil
   end
+
+  def with_rescue_and_duration_worker(correalation_id, worker, args, jid)
+    info correlation_id: correalation_id, status: "started", worker: worker, jid: jid, args: args
+    duration = Benchmark.measure { @result = yield }
+    info correlation_id: correalation_id, status: "finished", worker: worker, jid: jid, duration: duration.real.round(3)
+
+    @result
+  rescue Exception => e
+    Application.logger.fatal correlation_id: correalation_id, status: "failed", worker: worker, jid: jid, error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace
+    nil
+  end
 end
