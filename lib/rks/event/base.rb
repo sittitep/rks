@@ -4,10 +4,10 @@ module RKS
       include RKS::Event
       # include RKS::Support::Routable::Endpoint
 
-      attr_accessor :correalation_id, :payload
+      attr_accessor :correlation_id, :payload
 
       def initialize(args)
-        @correalation_id = args[:correalation_id]
+        @correlation_id = args[:correlation_id]
         @payload = args[:payload]
       end
     end
