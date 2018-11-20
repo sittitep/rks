@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rks (0.2.28)
+    rks (0.3.0)
       avro_turf (~> 0.8.1)
       byebug (~> 10.0.2)
       concurrent-ruby (~> 1.1.3)
