@@ -1,16 +1,21 @@
 require_relative "./test_helper"
+require 'sidekiq/testing' 
+
+Sidekiq::Testing.inline!
 
 class FooWorker
   include Sidekiq::Worker
 
   def perform(args)
-    args[:foo] + 1
+    args["foo"] + 1
   end
 end
 
 class TestConfigurable < Minitest::Test
   def test_perform
-    assert_equal 2, Sidekiq::Processor.new.execute_job(FooWorker.new, [{"correlation_id": "123", "foo": 1}])
-    assert_equal 2, FooWorker.new.perform(correlation_id: "123", foo: 1)
+    args = {"correlation_id" => "123", "foo" => 1}
+
+    assert_equal String, FooWorker.perform_async(args).class
+    assert_equal 2, FooWorker.new.perform(args)
   end
 end
