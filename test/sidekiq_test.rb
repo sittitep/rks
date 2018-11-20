@@ -11,7 +11,7 @@ class FooWorker
   end
 end
 
-class TestConfigurable < Minitest::Test
+class TestSidekiq < Minitest::Test
   def test_perform
     args = {"correlation_id" => "123", "foo" => 1}
 
