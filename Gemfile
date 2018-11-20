@@ -13,6 +13,7 @@ gem 'avro_turf'
 gem 'sidekiq'
 gem 'logstash-logger'
 gem 'poseidon'
+gem 'simplecov', require: false
 
 # Specify your gem's dependencies in rks.gemspec
 gemspec
