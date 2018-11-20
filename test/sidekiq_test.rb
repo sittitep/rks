@@ -18,4 +18,13 @@ class TestConfigurable < Minitest::Test
     assert_equal String, FooWorker.perform_async(args).class
     assert_equal 2, FooWorker.new.perform(args)
   end
+
+  def test_execute_job
+    @mgr = Minitest::Mock.new
+    @mgr.expect(:options, {:queues => ['default']})
+    @mgr.expect(:options, {:queues => ['default']})
+    @mgr.expect(:options, {:queues => ['default']})
+
+    assert_equal 2, Sidekiq::Processor.new(@mgr).execute_job(FooWorker.new, [{"correlation_id" => "123", "foo" => 1}])
+  end
 end
