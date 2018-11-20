@@ -27,4 +27,12 @@ class TestConfigurable < Minitest::Test
 
     assert_equal true, @foo.config.baz
   end
+
+  def test_raise_config_name_not_supported
+    assert_raises RKS::Support::Configurable::InvalidConfugurationName do
+      @foo.class_eval do
+        config_attr "foo"
+      end
+    end
+  end
 end
