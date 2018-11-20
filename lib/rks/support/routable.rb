@@ -41,24 +41,6 @@ module RKS
           routes.merge!({name => {block: block, options: options}})
         end
       end
-      
-      module Endpoint
-        extend RKS::Support::Concern
-
-        module ClassMethods
-          attr_accessor :payload
-        end
-
-        module InstanceMethods
-          def initialize(payload: nil)
-            @payload = payload
-          end
-
-          def payload
-            @payload
-          end
-        end
-      end
     end
   end
 end
