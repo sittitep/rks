@@ -37,14 +37,14 @@ LogStashLogger::MultiLogger.class_eval do
     nil
   end
 
-  def with_rescue_and_duration_action(correlation_id, actor, args)
-    info correlation_id: correlation_id, status: "started", action: actor, args: args
+  def with_rescue_and_duration_command(correlation_id, actor, args)
+    info correlation_id: correlation_id, status: "started", command: actor, args: args
     duration = Benchmark.measure { @result = yield }
-    info correlation_id: correlation_id, status: "finished", action: actor, duration: duration.real.round(3)
+    info correlation_id: correlation_id, status: "finished", command: actor, duration: duration.real.round(3)
 
     @result
   rescue Exception => e
-    Application.logger.fatal correlation_id: correlation_id, status: "failed", action: actor, error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace
+    Application.logger.fatal correlation_id: correlation_id, status: "failed", command: actor, error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace
     nil
   end
 
