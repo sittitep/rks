@@ -27,3 +27,5 @@ require 'rks/application'
 require 'rks/command'
 require 'rks/event'
 require 'rks/worker'
+
+require 'rks/config/sidekiq'

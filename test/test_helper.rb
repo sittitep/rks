@@ -3,6 +3,7 @@ SimpleCov.start
 
 SimpleCov.start do
   add_filter "/test/"
+  add_filter "/config/"
   add_filter "/lib/version.rb"
 end
 
