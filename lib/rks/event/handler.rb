@@ -12,7 +12,7 @@ module RKS
 
         def decode(payload:, options: {})
           if options[:type] == "AVRO"
-            Application.avro_registry.decode(value, schema_name: options[:avro][:schema_name], namespace: options[:avro][:namespace])
+            Application.avro_registry.decode(payload, schema_name: options[:avro][:schema_name], namespace: options[:avro][:namespace])
           else
             JSON.parse(payload)
           end

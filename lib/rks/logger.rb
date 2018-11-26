@@ -27,7 +27,12 @@ end
 
 LogStashLogger::MultiLogger.class_eval do
   def with_rescue_and_duration_event(correlation_id, event, payload)
-    info correlation_id: correlation_id, status: "started", event: event, payload: payload
+    begin
+      info correlation_id: correlation_id, status: "started", event: event, payload: payload
+    rescue Encoding::UndefinedConversionError
+      info correlation_id: correlation_id, status: "started", event: event
+    end
+    
     duration = Benchmark.measure { @result = yield }
     info correlation_id: correlation_id, status: "finished", event: event, duration: duration.real.round(3)
 
