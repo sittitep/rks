@@ -44,4 +44,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency "ruby-kafka", "~> 0.7.4"
   spec.add_dependency "sidekiq", "~> 5.2.3"
   spec.add_dependency "sidekiq-pro", "~> 4.0.4"
+  spec.add_dependency "rack", "~> 2.0.6"
+  spec.add_dependency "puma", "~> 3.12.0"
+
+  spec.add_runtime_dependency "thor"
 end
