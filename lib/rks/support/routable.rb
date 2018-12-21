@@ -40,7 +40,13 @@ module RKS
           end
 
           klass = Object.const_get(klass_name)
-          block = Proc.new { |correlation_id, payload| klass.new(correlation_id: correlation_id, payload: payload).send(action.to_sym) }
+
+          block = if klass_name.match(/Controller/)
+            Proc.new { |correlation_id, request| klass.new(correlation_id: correlation_id, request: request).send(action.to_sym) }
+          else
+            Proc.new { |correlation_id, payload| klass.new(correlation_id: correlation_id, payload: payload).send(action.to_sym) }
+          end
+
           routes.merge!({name => {block: block, options: options}})
         end
 
