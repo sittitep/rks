@@ -12,6 +12,7 @@ end
 
 Foo.router.draw do |r|
   r.on "foo-bar", to: "FooFoo#foo"
+  r.on "foo-bar-foo", to: "FooRoutable#foo"
 end
 
 class TestRoutable < Minitest::Test

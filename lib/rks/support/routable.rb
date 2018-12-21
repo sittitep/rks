@@ -35,10 +35,24 @@ module RKS
 
         def on(name, to:, options: {})
           klass_name, action = to.split('#')
-          klass = Object.const_get(klass_name)
+          unless Object.const_defined?(klass_name)
+            load_routable(Kernel.caller, klass_name)
+          end
 
+          klass = Object.const_get(klass_name)
           block = Proc.new { |correlation_id, payload| klass.new(correlation_id: correlation_id, payload: payload).send(action.to_sym) }
           routes.merge!({name => {block: block, options: options}})
+        end
+
+      private
+        def load_routable(paths, klass_name)
+          path = paths.find{|l| l.include?("`block in <top (required)>'")}.split[0].split("/")[1...-1]
+          Dir[File.join("/", *path ,"*.rb")].each do |file|
+            filename = File.basename(file, ".rb")
+            if filename.split("_").map(&:capitalize).join == klass_name 
+              require file
+            end
+          end
         end
       end
     end
