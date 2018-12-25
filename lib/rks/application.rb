@@ -25,7 +25,8 @@ class Application
         Kafka.consumer.subscribe(topic)
       end
       # This will loop indefinitely, yielding each message in turn.
-      Kafka.consumer.each_message do |message|
+      options = {max_bytes_per_partition: 2 * 1024 * 1024, max_wait_time: 1}
+      Kafka.consumer.each_message(options) do |message|
         RKS::Event::Processor.process(correlation_id: message.key, event: sanitized_event_name(message.topic), payload: message.value)
       end
     end
