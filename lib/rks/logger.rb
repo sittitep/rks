@@ -4,13 +4,12 @@ RKS::Logger = LogStashLogger
 RKS::Logger.module_eval do
   class << self
     def init(args = {})
-          new_args = {
+      new_args = {
         buffer_max_items: 5000,
         buffer_max_interval: 1,
         type: :multi_logger,
         outputs: [
           {type: :stdout}
-          # {type: :file, path: "log/#{ENV['RKS_ENV']}.log"} if ENV["LOG_FILE"]
         ]
       }.merge!(args)
       new(new_args)
@@ -61,6 +60,6 @@ LogStashLogger::MultiLogger.class_eval do
     @result
   rescue Exception => e
     Application.logger.fatal correlation_id: correlation_id, status: "failed", worker: worker, jid: jid, error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace
-    nil
+    raise e
   end
 end
