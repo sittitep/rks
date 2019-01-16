@@ -22,10 +22,10 @@ class Application
   
       RKS::Event::Handler.router.routes.keys.each do |event_name|
         topic = [config.env,event_name].join("-")
-        Kafka.consumer.subscribe(topic, max_bytes_per_partition: 2 * 1024 * 1024)
+        Kafka.consumer.subscribe(topic, max_bytes_per_partition: 1)
       end
       # This will loop indefinitely, yielding each message in turn.
-      Kafka.consumer.each_message(max_wait_time: 1) do |message|
+      Kafka.consumer.each_message(min_bytes: 1) do |message|
         RKS::Event::Processor.process(correlation_id: message.key, event: sanitized_event_name(message.topic), payload: message.value)
       end
     end
