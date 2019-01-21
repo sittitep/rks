@@ -4,6 +4,12 @@ Kafka.module_eval do
   include RKS::Support::Configurable
 
   class << self
+    def client_pool
+      @client_pool = ||= ConnectionPool.new(size: config.client_pool || 25, timeout: 15) {
+        new(config.brokers)
+      }
+    end
+
     def client(args = {})
       if args[:new]
         new(config.brokers)
