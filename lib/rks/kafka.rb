@@ -5,7 +5,7 @@ Kafka.module_eval do
 
   class << self
     def client_pool
-      @client_pool = ||= ConnectionPool.new(size: config.client_pool || 25, timeout: 15) {
+      @client_pool ||= ConnectionPool.new(size: (config.client_pool || 25), timeout: 15) {
         new(config.brokers)
       }
     end
