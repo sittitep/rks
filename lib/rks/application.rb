@@ -42,12 +42,15 @@ class Application
       def app
         Proc.new do |env|
           request = Rack::Request.new(env)
-          RKS::Controller::Processor.process(correlation_id: SecureRandom.hex, path: request.path, request: request)
+          RKS::Controller::Processor.process(correlation_id: (request.env["HTTP_CORRELATION_ID"] || SecureRandom.hex), path: request.path, request: request)
         end
       end
 
       def run
-        Rack::Handler::Puma.run(Server.app)
+        Rack::Handler::Puma.run(Server.app, {
+          Port: Application.config.server_port || 3000,
+          Threads: Application.config.server_threads || "32:32"
+        })
       end
     end
   end

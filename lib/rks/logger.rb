@@ -49,7 +49,9 @@ LogStashLogger::MultiLogger.class_eval do
     @result
   rescue Exception => e
     Application.logger.fatal correlation_id: correlation_id, status: "failed", path: path, error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace
-    nil
+    
+    response = JSON.dump({error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace})
+    ['500', {'Content-Type' => 'text/json'}, [response]]
   end
 
   def with_rescue_and_duration_command(correlation_id, actor, args)
