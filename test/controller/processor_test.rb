@@ -1,8 +1,9 @@
 require_relative "../test_helper"
+require 'ostruct'
 
 class TestController < RKS::Controller::Base
   def test
-    request[:data]
+    request.params["data"]
   end
 end
 
@@ -13,7 +14,9 @@ end
 
 class TestProcessorController < Minitest::Test
   def setup
-    @request = {data: "baz"}
+    @request = OpenStruct.new
+    @request.params = {"data" => "baz"}
+
     @processor = RKS::Controller::Processor.new(correlation_id: "foo", path: "test-processor-controller", request: @request)
   end
 
