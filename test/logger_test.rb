@@ -149,6 +149,8 @@ class TestLogger < Minitest::Test
       @logger.with_rescue_and_duration_worker("foo", "bar", "baz", "foo") do
         raise
       end
+    rescue
+      nil
     end
     
     worker_start_log, worker_error_log = stdout[0].split("\n").map{|log| JSON.parse(log)}
