@@ -27,7 +27,7 @@ end
 LogStashLogger::MultiLogger.class_eval do
   def with_rescue_and_duration_event(correlation_id, event, payload)
     begin
-      info correlation_id: correlation_id, status: "started", event: event, payload: payload
+      info correlation_id: correlation_id, status: "started", event: event, payload: mask_message(payload)
     rescue Encoding::UndefinedConversionError
       info correlation_id: correlation_id, status: "started", event: event
     end
@@ -42,7 +42,7 @@ LogStashLogger::MultiLogger.class_eval do
   end
 
   def with_rescue_and_duration_controller(correlation_id, path, request)
-    info correlation_id: correlation_id, status: "started", path: path, params: request.params
+    info correlation_id: correlation_id, status: "started", path: path, params: mask_message(request.params)
     duration = Benchmark.measure { @result = yield }
     info correlation_id: correlation_id, status: "finished", path: path, duration: duration.real.round(3)
 
@@ -55,7 +55,7 @@ LogStashLogger::MultiLogger.class_eval do
   end
 
   def with_rescue_and_duration_command(correlation_id, actor, args)
-    info correlation_id: correlation_id, status: "started", command: actor, args: args
+    info correlation_id: correlation_id, status: "started", command: actor, args: mask_message(args)
     duration = Benchmark.measure { @result = yield }
     info correlation_id: correlation_id, status: "finished", command: actor, duration: duration.real.round(3)
 
@@ -66,7 +66,7 @@ LogStashLogger::MultiLogger.class_eval do
   end
 
   def with_rescue_and_duration_worker(correlation_id, worker, args, jid)
-    info correlation_id: correlation_id, status: "started", worker: worker, jid: jid, args: args
+    info correlation_id: correlation_id, status: "started", worker: worker, jid: jid, args: mask_message(args)
     duration = Benchmark.measure { @result = yield }
     info correlation_id: correlation_id, status: "finished", worker: worker, jid: jid, duration: duration.real.round(3)
 
@@ -74,5 +74,19 @@ LogStashLogger::MultiLogger.class_eval do
   rescue Exception => e
     Application.logger.fatal correlation_id: correlation_id, status: "failed", worker: worker, jid: jid, error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace
     raise e
+  end
+private
+  def mask_message(message)
+    pattern, mask = /([1-9]\d{0,2}(,\d{3})+)(\.\d\d)?/, "x"
+
+    if message.is_a?(String)
+      message.gsub!(pattern, mask)
+    elsif message.is_a?(Hash)
+      message = JSON.dump(message)
+      message.gsub!(pattern, mask)
+      message = JSON.parse(message)
+    end
+
+    message
   end
 end

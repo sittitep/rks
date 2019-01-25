@@ -43,44 +43,44 @@ class TestLogger < Minitest::Test
     assert_equal "RuntimeError", event_error_log["error_name"]
   end
 
-  # def test_with_rescue_and_duration_controller_finished
-  #   stdout = capture_subprocess_io do
-  #     @logger.with_rescue_and_duration_controller("foo", "bar", "baz") do
-  #       nil
-  #     end
-  #   end
+  def test_with_rescue_and_duration_controller_finished
+    stdout = capture_subprocess_io do
+      @logger.with_rescue_and_duration_controller("foo", "bar", "baz") do
+        nil
+      end
+    end
 
-  #   controller_start_log, controller_finish_log = stdout[0].split("\n").map{|log| JSON.parse(log)}
+    controller_start_log, controller_finish_log = stdout[0].split("\n").map{|log| JSON.parse(log)}
 
-  #   assert_equal "foo", controller_start_log["correlation_id"]
-  #   assert_equal "started", controller_start_log["status"]
-  #   assert_equal "bar", controller_start_log["path"]
-  #   assert_equal "baz", controller_start_log["request"]
+    assert_equal "foo", controller_start_log["correlation_id"]
+    assert_equal "started", controller_start_log["status"]
+    assert_equal "bar", controller_start_log["path"]
+    assert_equal "baz", controller_start_log["request"]
 
-  #   assert_equal "foo", controller_finish_log["correlation_id"]
-  #   assert_equal "finished", controller_finish_log["status"]
-  #   assert_equal "bar", controller_finish_log["path"]
-  # end
+    assert_equal "foo", controller_finish_log["correlation_id"]
+    assert_equal "finished", controller_finish_log["status"]
+    assert_equal "bar", controller_finish_log["path"]
+  end
 
-  # def test_with_rescue_and_duration_controller_failed
-  #   stdout = capture_subprocess_io do
-  #     @logger.with_rescue_and_duration_controller("foo", "bar", "baz") do
-  #       raise
-  #     end
-  #   end
+  def test_with_rescue_and_duration_controller_failed
+    stdout = capture_subprocess_io do
+      @logger.with_rescue_and_duration_controller("foo", "bar", "baz") do
+        raise
+      end
+    end
 
-  #   controller_start_log, controller_error_log = stdout[0].split("\n").map{|log| JSON.parse(log)}
+    controller_start_log, controller_error_log = stdout[0].split("\n").map{|log| JSON.parse(log)}
 
-  #   assert_equal "foo", controller_start_log["correlation_id"]
-  #   assert_equal "started", controller_start_log["status"]
-  #   assert_equal "bar", controller_start_log["path"]
-  #   assert_equal "baz", controller_start_log["request"]
+    assert_equal "foo", controller_start_log["correlation_id"]
+    assert_equal "started", controller_start_log["status"]
+    assert_equal "bar", controller_start_log["path"]
+    assert_equal "baz", controller_start_log["request"]
 
-  #   assert_equal "foo", controller_error_log["correlation_id"]
-  #   assert_equal "failed", controller_error_log["status"]
-  #   assert_equal "bar", controller_error_log["path"]
-  #   assert_equal "RuntimeError", controller_error_log["error_name"]
-  # end
+    assert_equal "foo", controller_error_log["correlation_id"]
+    assert_equal "failed", controller_error_log["status"]
+    assert_equal "bar", controller_error_log["path"]
+    assert_equal "RuntimeError", controller_error_log["error_name"]
+  end
 
   def test_with_rescue_and_duration_command_finished
     stdout = capture_subprocess_io do
@@ -160,5 +160,16 @@ class TestLogger < Minitest::Test
     assert_equal "failed", worker_error_log["status"]
     assert_equal "bar", worker_error_log["worker"]
     assert_equal "RuntimeError", worker_error_log["error_name"]
+  end
+
+  def test_mask_message
+    message = @logger.send(:mask_message, "200,000.00บ")
+    assert_equal "xบ", message
+
+    message = @logger.send(:mask_message, {message: "200,000บ"})
+    assert_equal({"message" => "xบ"}, message)
+
+    message = @logger.send(:mask_message, {"message" => "200,000บ"})
+    assert_equal({"message" => "xบ"}, message)
   end
 end
