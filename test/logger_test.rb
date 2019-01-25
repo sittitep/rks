@@ -3,6 +3,9 @@ require_relative "./test_helper"
 class TestLogger < Minitest::Test
   def setup
     @logger = RKS::Logger.init
+
+    @mock_request = Minitest::Mock.new
+    @mock_request.expect :params, "baz"
   end
 
   def test_with_rescue_and_duration_event_finished
@@ -45,7 +48,7 @@ class TestLogger < Minitest::Test
 
   def test_with_rescue_and_duration_controller_finished
     stdout = capture_subprocess_io do
-      @logger.with_rescue_and_duration_controller("foo", "bar", "baz") do
+      @logger.with_rescue_and_duration_controller("foo", "bar", @mock_request) do
         nil
       end
     end
@@ -55,7 +58,7 @@ class TestLogger < Minitest::Test
     assert_equal "foo", controller_start_log["correlation_id"]
     assert_equal "started", controller_start_log["status"]
     assert_equal "bar", controller_start_log["path"]
-    assert_equal "baz", controller_start_log["request"]
+    assert_equal "baz", controller_start_log["params"]
 
     assert_equal "foo", controller_finish_log["correlation_id"]
     assert_equal "finished", controller_finish_log["status"]
@@ -64,7 +67,7 @@ class TestLogger < Minitest::Test
 
   def test_with_rescue_and_duration_controller_failed
     stdout = capture_subprocess_io do
-      @logger.with_rescue_and_duration_controller("foo", "bar", "baz") do
+      @logger.with_rescue_and_duration_controller("foo", "bar", @mock_request) do
         raise
       end
     end
@@ -74,7 +77,7 @@ class TestLogger < Minitest::Test
     assert_equal "foo", controller_start_log["correlation_id"]
     assert_equal "started", controller_start_log["status"]
     assert_equal "bar", controller_start_log["path"]
-    assert_equal "baz", controller_start_log["request"]
+    assert_equal "baz", controller_start_log["params"]
 
     assert_equal "foo", controller_error_log["correlation_id"]
     assert_equal "failed", controller_error_log["status"]
