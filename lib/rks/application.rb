@@ -39,10 +39,18 @@ class Application
 
   module Server
     class << self
+      def namespace
+        Application.config.name || Application.config.server_namespace
+      end
+
       def app
-        Proc.new do |env|
-          request = Rack::Request.new(env)
-          RKS::Controller::Processor.process(correlation_id: (request.env["HTTP_CORRELATION_ID"] || SecureRandom.hex), path: request.path, request: request)
+        Rack::Builder.app do
+          map "/#{namespace}" do
+            run Proc.new { |env|
+              request = Rack::Request.new(env)
+              RKS::Controller::Processor.process(correlation_id: (request.env["HTTP_CORRELATION_ID"] || SecureRandom.hex), path: request.path, request: request)
+            }
+          end
         end
       end
 
