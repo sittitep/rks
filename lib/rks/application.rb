@@ -44,8 +44,9 @@ class Application
       end
 
       def app
+        @namespace = self.namespace
         Rack::Builder.app do
-          map "/#{namespace}" do
+          map "/#{@namespace}" do
             run Proc.new { |env|
               request = Rack::Request.new(env)
               RKS::Controller::Processor.process(correlation_id: (request.env["HTTP_CORRELATION_ID"] || SecureRandom.hex), path: request.path, request: request)
