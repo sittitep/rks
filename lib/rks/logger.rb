@@ -80,13 +80,13 @@ private
     pattern, mask = /([1-9]\d{0,2}(,\d{3})+)(\.\d\d)?/, "x"
 
     if message.is_a?(String)
-      message.gsub!(pattern, mask)
+      masked_message = message.gsub(pattern, mask)
     elsif message.is_a?(Hash)
       message = JSON.dump(message)
-      message.gsub!(pattern, mask)
-      message = JSON.parse(message)
+      masked_message = message.gsub(pattern, mask)
+      masked_message = JSON.parse(masked_message)
     end
 
-    message
+    masked_message
   end
 end
