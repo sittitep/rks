@@ -1,0 +1,8 @@
+:concurrency: 25
+:queues:
+  - [urgent, 32]
+  - [critical, 16]
+  - [high, 8]
+  - [medium, 4]
+  - [low, 2] 
+  - [lazy, 1]
