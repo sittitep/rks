@@ -61,12 +61,7 @@ LogStashLogger::MultiLogger.class_eval do
 
     @result
   rescue Exception => e
-    begin 
-      error_message = JSON.parse(e.message)
-    rescue
-      error_message = e.message
-    end
-    Application.logger.fatal correlation_id: correlation_id, status: "failed", command: actor, error_name: e.class.to_s, error_message: error_message, error_detail: e.backtrace
+    Application.logger.fatal correlation_id: correlation_id, status: "failed", command: actor, error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace
     nil
   end
 
@@ -77,7 +72,12 @@ LogStashLogger::MultiLogger.class_eval do
 
     @result
   rescue Exception => e
-    Application.logger.fatal correlation_id: correlation_id, status: "failed", worker: worker, jid: jid, error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace
+    begin 
+      error_message = JSON.parse(e.message)
+    rescue
+      error_message = e.message
+    end
+    Application.logger.fatal correlation_id: correlation_id, status: "failed", worker: worker, jid: jid, error_name: e.class.to_s, error_message: error_message, error_detail: e.backtrace
     raise e
   end
 private
