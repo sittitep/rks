@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/sittitep/rks.git
-  revision: e2467f72b23d2c8b24698d5cccd1f54d0d3d8f68
+  revision: 94d72fc003296c5458edb1248030e96e1ffc8ae4
   branch: master
   specs:
-    rks (0.3.17)
+    rks (0.3.19)
       avro_turf (~> 0.8.1)
       byebug (~> 10.0.2)
       concurrent-ruby (~> 1.1.3)
