@@ -30,6 +30,9 @@ class Application
       Kafka.consumer.each_message(min_bytes: 1) do |message|
         RKS::Event::Processor.process(correlation_id: message.key, event: sanitized_event_name(message.topic), payload: message.value)
       end
+    ensure
+      Application.logger.info message: "Application is shutting down gracefully"
+      Kafka.consumer.stop
     end
   
     def sanitized_event_name(topic)
