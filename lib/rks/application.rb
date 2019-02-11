@@ -33,6 +33,7 @@ class Application
     ensure
       Application.logger.info message: "Application is shutting down gracefully"
       Kafka.consumer.stop
+      exit(0)
     end
   
     def sanitized_event_name(topic)
