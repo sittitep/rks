@@ -1,5 +1,5 @@
 PATH
-  remote: .
+  remote: ../..
   specs:
     rks (0.3.19)
       avro_turf (~> 0.8.1)

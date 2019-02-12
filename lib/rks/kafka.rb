@@ -78,13 +78,13 @@ private
         raise message
       end
     end
-  rescue OffsetOutOfRange => e
+  rescue Kafka::OffsetOutOfRange => e
     @logger.error "Invalid offset #{e.offset} for #{e.topic}/#{e.partition}, resetting to default offset"
 
     @offset_manager.seek_to_default(e.topic, e.partition)
 
     retry
-  rescue ConnectionError => e
+  rescue Kafka::ConnectionError => e
     @logger.error "Connection error while fetching messages: #{e}"
 
     raise FetchError, e
