@@ -24,7 +24,7 @@ class Application
   
       RKS::Event::Handler.router.routes.keys.each do |event_name|
         topic = [config.env,event_name].join("-")
-        Kafka.consumer.subscribe(topic, max_bytes_per_partition: 1)
+        Kafka.consumer.subscribe(topic)
       end
       # This will loop indefinitely, yielding each message in turn.
     begin
