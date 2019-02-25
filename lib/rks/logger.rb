@@ -2,6 +2,9 @@ require 'logstash-logger'
 
 RKS::Logger = LogStashLogger
 RKS::Logger.module_eval do
+  PATTERN = "/([1-9]\d{0,2}(,\d{3})+)(\.\d\d)?/".freeze
+  MASK = "x".freeze
+
   class << self
     def init(args = {})
       new_args = {
@@ -26,10 +29,10 @@ end
 
 LogStashLogger::MultiLogger.class_eval do
   def with_rescue_and_duration_event(correlation_id, event, payload)
-    begin
-      info correlation_id: correlation_id, status: "started", event: event, payload: mask_message(payload)
-    rescue Encoding::UndefinedConversionError
+    if RKS::Event::Handler.router.routes[event].dig(:options, :type) == "AVRO"
       info correlation_id: correlation_id, status: "started", event: event
+    else
+      info correlation_id: correlation_id, status: "started", event: event, payload: mask_message(payload)
     end
     
     duration = Benchmark.measure { @result = yield }
@@ -82,16 +85,13 @@ LogStashLogger::MultiLogger.class_eval do
   end
 private
   def mask_message(message)
-    pattern, mask = /([1-9]\d{0,2}(,\d{3})+)(\.\d\d)?/, "x"
-
     if message.is_a?(String)
-      masked_message = message.gsub(pattern, mask)
+      message.gsub!(PATTERN, MASK)
     elsif message.is_a?(Hash)
       message = JSON.dump(message)
-      masked_message = message.gsub(pattern, mask)
-      masked_message = JSON.parse(masked_message)
+      message.gsub!(PATTERN, MASK)
+      JSON.parse(message)
     end
-
-    masked_message
+    message
   end
 end
