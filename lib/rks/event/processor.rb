@@ -12,7 +12,7 @@ module RKS
         @event = event
         @payload = payload
 
-        self.class.set_current_processor(self)
+        # self.class.set_current_processor(self)
       end
 
       def process
@@ -22,17 +22,17 @@ module RKS
       end
 
       class << self
-        def set_current_processor(processor)
-          @current = Concurrent::ThreadLocalVar.new(processor)
-        end
+        # def set_current_processor(processor)
+        #   @current = Concurrent::ThreadLocalVar.new(processor)
+        # end
 
-        def current
-          if @current
-            @current.value
-          else
-            raise ProcessorNotInitialized, "#set_current_processor is needed"
-          end
-        end
+        # def current
+        #   if @current
+        #     @current.value
+        #   else
+        #     raise ProcessorNotInitialized, "#set_current_processor is needed"
+        #   end
+        # end
 
         def process(args)
           new(args).process
