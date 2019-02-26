@@ -29,7 +29,7 @@ end
 
 LogStashLogger::MultiLogger.class_eval do
   def with_rescue_and_duration_event(correlation_id, event, payload)
-    if RKS::Event::Handler.router.routes[event].dig(:options, :type) == "AVRO"
+    if RKS::Event::Handler.router.routes[event].dig(:options, :log_payload) == false
       info correlation_id: correlation_id, status: "started", event: event
     else
       info correlation_id: correlation_id, status: "started", event: event, payload: mask_message(payload)
