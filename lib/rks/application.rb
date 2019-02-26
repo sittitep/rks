@@ -27,13 +27,13 @@ class Application
         Kafka.consumer.subscribe(topic)
       end
       # This will loop indefinitely, yielding each message in turn.
-    begin
-      Kafka.consumer.each_message(min_bytes: 1) do |message|
-        RKS::Event::Processor.process(correlation_id: message.key, event: sanitized_event_name(message.topic), payload: message.value)
+      begin
+        Kafka.consumer.each_message(min_bytes: 1) do |message|
+          RKS::Event::Processor.process(correlation_id: message.key, event: sanitized_event_name(message.topic), payload: message.value)
+        end
+      rescue Exception => e
+        Application.logger.fatal error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace
       end
-    rescue Exception => e
-      Application.logger.fatal error_name: e.class.to_s, error_message: e.message, error_detail: e.backtrace
-    end
     ensure
       Application.logger.info message: "Application is shutting down gracefully"
       Kafka.consumer.stop

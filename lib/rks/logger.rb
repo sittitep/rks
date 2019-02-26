@@ -2,7 +2,7 @@ require 'logstash-logger'
 
 RKS::Logger = LogStashLogger
 RKS::Logger.module_eval do
-  PATTERN = "/([1-9]\d{0,2}(,\d{3})+)(\.\d\d)?/".freeze
+  PATTERN = /([1-9]\d{0,2}(,\d{3})+)(\.\d\d)?/.freeze
   MASK = "x".freeze
 
   class << self
@@ -90,7 +90,7 @@ private
     elsif message.is_a?(Hash)
       message = JSON.dump(message)
       message.gsub!(PATTERN, MASK)
-      JSON.parse(message)
+      message = JSON.parse(message)
     end
     message
   end

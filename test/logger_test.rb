@@ -32,7 +32,6 @@ class TestLogger < Minitest::Test
         raise
       end
     end
-
     event_start_log, event_error_log = stdout[0].split("\n").map{|log| JSON.parse(log)}
 
     assert_equal "foo", event_start_log["correlation_id"]
