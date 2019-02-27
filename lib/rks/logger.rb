@@ -29,10 +29,14 @@ end
 
 LogStashLogger::MultiLogger.class_eval do
   def with_rescue_and_duration_event(correlation_id, event, payload)
-    if RKS::Event::Handler.router.routes[event].dig(:options, :log_payload) == false
+    if RKS::Event::Handler.router.routes[event].dig(:options, :payload_type) == "AVRO"
       info correlation_id: correlation_id, status: "started", event: event
     else
-      info correlation_id: correlation_id, status: "started", event: event, payload: mask_message(payload)
+      begin
+        info correlation_id: correlation_id, status: "started", event: event, payload: JSON.parse(mask_message(payload))
+      rescue JSON::ParserError
+        info correlation_id: correlation_id, status: "started", event: event, payload: mask_message(payload)
+      end
     end
     
     duration = Benchmark.measure { @result = yield }

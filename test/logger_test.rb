@@ -6,16 +6,57 @@ class TestLogger < Minitest::Test
 
     @mock_request = Minitest::Mock.new
     @mock_request.expect :params, "baz"
+
+    RKS::Event::Handler.router.draw do |r|
+      r.on "bar", to: "Foo#Bar"
+      r.on "bar-baz", to: "Foo#Bar", options: {payload_type: "AVRO"}
+    end
   end
 
-  def test_with_rescue_and_duration_event_finished
+  def test_with_rescue_and_duration_event_finished_with_avro
+    stdout = capture_subprocess_io do
+      @logger.with_rescue_and_duration_event("foo", "bar-baz", "baz") do
+        nil
+      end
+    end
+    event_start_log, event_finish_log = stdout[0].split("\n").map{|log| JSON.parse(log)}
+
+    assert_equal "foo", event_start_log["correlation_id"]
+    assert_equal "started", event_start_log["status"]
+    assert_equal "bar-baz", event_start_log["event"]
+    assert_equal nil, event_start_log["payload"]
+
+    assert_equal "foo", event_finish_log["correlation_id"]
+    assert_equal "finished", event_finish_log["status"]
+    assert_equal "bar-baz", event_finish_log["event"]
+  end
+
+  def test_with_rescue_and_duration_event_finished_with_stringnified_json
+    stdout = capture_subprocess_io do
+      @logger.with_rescue_and_duration_event("foo", "bar", JSON.dump({foo: "bar"})) do
+        nil
+      end
+    end
+    event_start_log, event_finish_log = stdout[0].split("\n").map{|log| JSON.parse(log)}
+    
+    assert_equal "foo", event_start_log["correlation_id"]
+    assert_equal "started", event_start_log["status"]
+    assert_equal "bar", event_start_log["event"]
+    assert_equal({"foo"=>"bar"}, event_start_log["payload"])
+
+    assert_equal "foo", event_finish_log["correlation_id"]
+    assert_equal "finished", event_finish_log["status"]
+    assert_equal "bar", event_finish_log["event"]
+  end
+
+  def test_with_rescue_and_duration_event_finished_with_string
     stdout = capture_subprocess_io do
       @logger.with_rescue_and_duration_event("foo", "bar", "baz") do
         nil
       end
     end
     event_start_log, event_finish_log = stdout[0].split("\n").map{|log| JSON.parse(log)}
-
+    
     assert_equal "foo", event_start_log["correlation_id"]
     assert_equal "started", event_start_log["status"]
     assert_equal "bar", event_start_log["event"]
