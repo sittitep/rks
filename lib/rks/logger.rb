@@ -90,7 +90,7 @@ LogStashLogger::MultiLogger.class_eval do
 private
   def mask_message(message)
     if message.is_a?(String)
-      message.gsub!(PATTERN, MASK)
+      message.gsub(PATTERN, MASK)
     elsif message.is_a?(Hash)
       message = JSON.dump(message)
       message.gsub!(PATTERN, MASK)
