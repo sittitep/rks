@@ -1,3 +1,3 @@
 module RKS
-  VERSION = "0.3.28"
+  VERSION = "0.4.0"
 end

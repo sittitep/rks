@@ -6,15 +6,36 @@ Kafka.module_eval do
   class << self
     def client_pool
       @client_pool ||= ConnectionPool.new(size: (config.client_pool || 25), timeout: 15) {
-        new(config.brokers)
+        new(
+          config.brokers,
+          ssl_ca_cert: config.ssl_ca_cert,
+          ssl_client_cert: config.ssl_client_cert,
+          ssl_client_cert_key: config.ssl_client_cert_key,
+          ssl_client_cert_key_password: config.ssl_client_cert_key_password,
+          ssl_verify_hostname: config.ssl_verify_hostname
+        )
       }
     end
 
     def client(args = {})
       if args[:new]
-        new(config.brokers)
+        new(
+          config.brokers,
+          ssl_ca_cert: config.ssl_ca_cert,
+          ssl_client_cert: config.ssl_client_cert,
+          ssl_client_cert_key: config.ssl_client_cert_key,
+          ssl_client_cert_key_password: config.ssl_client_cert_key_password,
+          ssl_verify_hostname: config.ssl_verify_hostname
+        )
       else
-        @client ||= new(config.brokers)
+        @client ||= new(
+          config.brokers,
+          ssl_ca_cert: config.ssl_ca_cert,
+          ssl_client_cert: config.ssl_client_cert,
+          ssl_client_cert_key: config.ssl_client_cert_key,
+          ssl_client_cert_key_password: config.ssl_client_cert_key_password,
+          ssl_verify_hostname: config.ssl_verify_hostname
+        )
       end
     end
 
