@@ -33,7 +33,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 2.2.26"
-  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "rake", "~> 13.0.6"
   
   spec.add_dependency "avro_turf", "~> 0.8.1"
   spec.add_dependency "byebug", "~> 10.0.2"
