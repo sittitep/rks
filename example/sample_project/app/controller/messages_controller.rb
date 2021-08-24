@@ -9,7 +9,7 @@ class MessagesController < RKS::Controller::Base
     puts "=" * 10
     
     payload = {name: name, message: message}
-    PRODUCER.produce(payload, topic: "message-received", key: Time.now.to_i, encoding: false)
+    PRODUCER.produce(payload, topic: "message-received", key: correlation_id, encoding: false)
 
     ['200', {'Content-Type' => 'text/plain'}, ["OK"]]
   end

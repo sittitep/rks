@@ -35,7 +35,7 @@ module RKS
         # end
 
         def process(args)
-          new(args).process
+          new(**args).process
         end
       end
     end

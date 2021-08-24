@@ -42,9 +42,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency "minitest", "~> 5.11.3"
   spec.add_dependency "poseidon", "~> 0.0.5"
   spec.add_dependency "ruby-kafka", "~> 0.7.4"
-  spec.add_dependency "sidekiq", "~> 6.0.2"
+  spec.add_dependency "sidekiq", "~> 6.2.2"
   spec.add_dependency "rack", "~> 2.0.6"
-  spec.add_dependency "puma", "~> 3.12.0"
+  spec.add_dependency "puma", "~> 5.4.0"
 
   spec.add_runtime_dependency "thor"
 end
