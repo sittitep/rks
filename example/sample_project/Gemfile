@@ -1,3 +1,4 @@
 source 'https://rubygems.org'
 
-gem 'rks', git: 'https://github.com/sittitep/rks.git', branch: 'master'
+# gem 'rks', git: 'https://github.com/sittitep/rks.git', branch: 'master'
+gem 'rks', path: '/Users/sittitep/projects/rks'

@@ -64,10 +64,10 @@ class Application
       end
 
       def run
-        Rack::Handler::Puma.run(Server.app, {
+        Rack::Handler::Puma.run(Server.app,
           Port: Application.config.server_port || 3000,
           Threads: Application.config.server_threads || "32:32"
-        })
+        )
       end
     end
   end

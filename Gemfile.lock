@@ -9,7 +9,7 @@ PATH
       minitest (~> 5.11.3)
       poseidon (~> 0.0.5)
       puma (~> 5.4.0)
-      rack (~> 2.0.6)
+      rack (~> 2.2.2)
       ruby-kafka (~> 0.7.4)
       sidekiq (~> 6.2.2)
       thor
@@ -37,7 +37,7 @@ GEM
     poseidon (0.0.5)
     puma (5.4.0)
       nio4r (~> 2.0)
-    rack (2.0.9)
+    rack (2.2.3)
     rake (10.5.0)
     redis (4.4.0)
     ruby-kafka (0.7.10)
