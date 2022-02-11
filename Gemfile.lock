@@ -8,7 +8,7 @@ PATH
       logstash-logger (~> 0.26.1)
       minitest (~> 5.11.3)
       poseidon (~> 0.0.5)
-      puma (~> 5.4.0)
+      puma (>= 5.4, < 5.7)
       rack (~> 2.2.2)
       ruby-kafka (~> 0.7.4)
       sidekiq (~> 6.2.2)
@@ -36,7 +36,7 @@ GEM
     multi_json (1.15.0)
     nio4r (2.5.8)
     poseidon (0.0.5)
-    puma (5.4.0)
+    puma (5.6.2)
       nio4r (~> 2.0)
     rack (2.2.3)
     rake (13.0.6)
@@ -57,6 +57,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-19
+  x86_64-linux
 
 DEPENDENCIES
   avro_turf
